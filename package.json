@@ -1,0 +1,12 @@
+{
+  "name": "barbearia",
+  "private": true,
+  "workspaces": ["frontend", "backend"],
+  "devDependencies": {"eslint": "^10.0.0", "typescript-eslint": "^8.0.0"},
+  "scripts": {
+    "dev": "bun --filter '*' dev",
+    "build": "bun --filter '*' build",
+    "test": "bun --filter '*' test",
+    "lint": "bun --filter '*' lint"
+  }
+}
