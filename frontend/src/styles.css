@@ -1,0 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Oswald:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@theme { --font-display: 'Oswald', sans-serif; --font-body: 'Plus Jakarta Sans', sans-serif; --font-mono: 'DM Mono', monospace; }
+@layer base { body { @apply bg-[#ede9e1] text-[#1d1d1b] font-body; } input, select { @apply w-full border-b border-[#9f9789] bg-transparent px-0 py-3 outline-none focus:border-[#bd4f2d]; } }

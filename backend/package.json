@@ -1,0 +1,6 @@
+{
+  "name": "@barbearia/backend",
+  "scripts": {"dev":"next dev","build":"next build","lint":"eslint .","test":"bun test","start":"next start","hash":"bun scripts/generate-password-hash.ts"},
+  "dependencies": {"@types/pg":"^8.11.10","ioredis":"^5.4.1","next":"^15.1.0","pg":"^8.13.1","react":"^19.0.0","react-dom":"^19.0.0"},
+  "devDependencies": {"@types/node":"^22.10.1","@types/react":"^19.0.0","@types/react-dom":"^19.0.0","eslint":"^10.0.0","typescript":"^5.7.2","typescript-eslint":"^8.0.0"}
+}
