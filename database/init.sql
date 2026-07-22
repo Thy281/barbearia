@@ -7,11 +7,12 @@ CREATE TABLE appointments (
   phone VARCHAR(30) NOT NULL,
   service VARCHAR(80) NOT NULL,
   appointment_at TIMESTAMPTZ NOT NULL,
+  cancel_token_hash CHAR(64) NOT NULL UNIQUE,
   status appointment_status NOT NULL DEFAULT 'PENDING',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX appointments_appointment_at_idx ON appointments (appointment_at);
+CREATE UNIQUE INDEX appointments_active_appointment_at_key ON appointments (appointment_at) WHERE status <> 'NO_SHOW';
 
 CREATE TABLE available_slots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

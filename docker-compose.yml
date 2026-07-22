@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: barbearia
       POSTGRES_USER: barbearia
-      POSTGRES_PASSWORD: barbearia_local
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no arquivo .env}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -21,7 +21,7 @@ services:
   backend:
     build: ./backend
     environment:
-      DATABASE_URL: postgresql://barbearia:barbearia_local@postgres:5432/barbearia
+      DATABASE_URL: ${DATABASE_URL:?Defina DATABASE_URL no arquivo .env}
       REDIS_URL: redis://redis:6379
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
       ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET}

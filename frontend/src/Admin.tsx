@@ -17,7 +17,7 @@ export default function Admin() {
   const dim = daysInMonth(cm,cy); const fdow = firstDow(cm,cy);
   const daysArr:{n:number,off:boolean,ok:boolean}[] = [];
   for (let i=0;i<fdow;i++) daysArr.push({n:0,off:true,ok:false});
-  for (let d=1;d<=dim;d++){const ds=cy+'-'+String(cm+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');daysArr.push({n:d,off:false,ok:true});}
+  for (let d=1;d<=dim;d++) daysArr.push({n:d,off:false,ok:true});
   const priceOf = (s:string) => { const sv = services.find(x => x.name === s); return sv ? sv.price : ''; };
   async function load(){const r=await fetch(`${api}/api/appointments`,{credentials:'include'});if(!r.ok)throw new Error('Erro');setItems(await r.json());}
   async function login(e:FormEvent){e.preventDefault();setError('');const r=await fetch(`${api}/api/admin/login`,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({password})});if(!r.ok){setError('Senha inválida.');return;}setLogged(true);await load();}

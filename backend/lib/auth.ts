@@ -1,7 +1,11 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 import { NextRequest } from 'next/server';
 
-const secret = () => process.env.ADMIN_SESSION_SECRET ?? '';
+const secret = () => {
+  const value = process.env.ADMIN_SESSION_SECRET;
+  if (!value || value.length < 32) throw new Error('ADMIN_SESSION_SECRET deve ter ao menos 32 caracteres.');
+  return value;
+};
 export function validPassword(password: string) {
   const expected = process.env.ADMIN_PASSWORD_HASH;
   if (!expected) return false;
