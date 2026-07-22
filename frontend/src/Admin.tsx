@@ -66,7 +66,13 @@ export default function Admin() {
         {error&&<p className="mb-6 bg-[#bd4f2d]/10 px-4 py-2 text-sm text-[#bd4f2d]">{error}</p>}
 
         {tab==='agenda' ? (
-          <div className="overflow-x-auto bg-white shadow-sm">
+          <div>
+            <div className="mb-4 flex gap-3 font-mono text-xs uppercase tracking-wider">
+              <span className="rounded bg-[#1d1d1b] px-3 py-1.5 text-white">{items.filter(x=>x.status==='COMPLETED').length} Feito</span>
+              <span className="rounded border border-[#bd4f2d] px-3 py-1.5 text-[#bd4f2d]">{items.filter(x=>x.status==='NO_SHOW').length} Não realizado</span>
+              <span className="rounded border border-amber-600 px-3 py-1.5 text-amber-700">{items.filter(x=>x.status==='PENDING').length} Pendente</span>
+            </div>
+            <div className="overflow-x-auto bg-white shadow-sm">
             <table className="w-full min-w-200 text-left">
               <thead>
                 <tr className="border-b-2 border-[#1d1d1b] font-mono text-xs uppercase tracking-wider text-[#5b574f]">
@@ -91,7 +97,7 @@ export default function Admin() {
                       <span className={`inline-block px-2 py-0.5 font-mono text-xs uppercase ${
                         item.status==='PENDING'?'border border-amber-600 text-amber-700':
                         item.status==='COMPLETED'?'bg-[#1d1d1b] text-white':
-                        'border border-[#5b574f] text-[#5b574f]'
+                        'border border-[#bd4f2d] text-[#bd4f2d] line-through'
                       }`}>{labels[item.status]}</span>
                     </td>
                     <td className="px-4 py-3">
@@ -109,6 +115,7 @@ export default function Admin() {
               </tbody>
             </table>
             {items.length===0&&<p className="py-16 text-center text-sm text-[#5b574f]">Nenhum agendamento encontrado.</p>}
+          </div>
           </div>
         ) : !selDate ? (
           <div className="mx-auto max-w-md">
