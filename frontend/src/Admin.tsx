@@ -68,7 +68,7 @@ export default function Admin() {
         {tab==='agenda' ? (
           <div>
             <div className="mb-4 flex gap-3 font-mono text-xs uppercase tracking-wider">
-              <span className="rounded bg-[#1d1d1b] px-3 py-1.5 text-white">{items.filter(x=>x.status==='COMPLETED').length} Feito</span>
+              <span className="rounded border border-[#1d1d1b] px-3 py-1.5 text-[#1d1d1b]">{items.filter(x=>x.status==='COMPLETED').length} Feito</span>
               <span className="rounded border border-[#bd4f2d] px-3 py-1.5 text-[#bd4f2d]">{items.filter(x=>x.status==='NO_SHOW').length} Não realizado</span>
               <span className="rounded border border-amber-600 px-3 py-1.5 text-amber-700">{items.filter(x=>x.status==='PENDING').length} Pendente</span>
             </div>
@@ -103,9 +103,13 @@ export default function Admin() {
                     <td className="px-4 py-3">
                       <div className="flex gap-1.5">
                         <button onClick={()=>change(item.id,'PATCH','COMPLETED')}
-                          className="bg-[#1d1d1b] px-2.5 py-1 font-mono text-xs uppercase tracking-wider text-white transition hover:bg-[#bd4f2d]">Feito</button>
+                          className={`px-2.5 py-1 font-mono text-xs uppercase tracking-wider transition ${
+                            item.status==='COMPLETED' ? 'bg-[#1d1d1b] text-white' : 'border border-[#1d1d1b] text-[#1d1d1b] hover:bg-[#1d1d1b] hover:text-white'
+                          }`}>Feito</button>
                         <button onClick={()=>change(item.id,'PATCH','NO_SHOW')}
-                          className="border border-[#1d1d1b] px-2.5 py-1 font-mono text-xs uppercase tracking-wider transition hover:bg-[#1d1d1b] hover:text-white">Não veio</button>
+                          className={`px-2.5 py-1 font-mono text-xs uppercase tracking-wider transition ${
+                            item.status==='NO_SHOW' ? 'bg-[#1d1d1b] text-white' : 'border border-[#1d1d1b] text-[#1d1d1b] hover:bg-[#1d1d1b] hover:text-white'
+                          }`}>Não veio</button>
                         <button onClick={()=>change(item.id,'DELETE')}
                           className="border border-[#bd4f2d] px-2.5 py-1 font-mono text-xs uppercase tracking-wider text-[#bd4f2d] transition hover:bg-[#bd4f2d] hover:text-white">Excluir</button>
                       </div>
