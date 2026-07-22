@@ -68,9 +68,9 @@ export default function Admin() {
         {tab==='agenda' ? (
           <div>
             <div className="mb-4 flex gap-3 font-mono text-xs uppercase tracking-wider">
-              <span className="rounded border border-[#1d1d1b] px-3 py-1.5 text-[#1d1d1b]">{items.filter(x=>x.status==='COMPLETED').length} Feito</span>
+              <span className="rounded border border-[#bd4f2d] px-3 py-1.5 text-[#bd4f2d]">{items.filter(x=>x.status==='COMPLETED').length} Feito</span>
               <span className="rounded border border-[#bd4f2d] px-3 py-1.5 text-[#bd4f2d]">{items.filter(x=>x.status==='NO_SHOW').length} Não realizado</span>
-              <span className="rounded border border-amber-600 px-3 py-1.5 text-amber-700">{items.filter(x=>x.status==='PENDING').length} Pendente</span>
+              <span className="rounded border border-[#bd4f2d] px-3 py-1.5 text-[#bd4f2d]">{items.filter(x=>x.status==='PENDING').length} Pendente</span>
             </div>
             <div className="overflow-x-auto bg-white shadow-sm">
             <table className="w-full min-w-200 text-left">
@@ -94,10 +94,8 @@ export default function Admin() {
                     <td className="px-4 py-3 font-mono text-sm">{priceOf(item.service)}</td>
                     <td className="px-4 py-3 text-sm">{new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(new Date(item.appointment_at))}</td>
                     <td className="px-4 py-3">
-                      <span className={`inline-block px-2 py-0.5 font-mono text-xs uppercase ${
-                        item.status==='PENDING'?'border border-amber-600 text-amber-700':
-                        item.status==='COMPLETED'?'bg-[#1d1d1b] text-white':
-                        'border border-[#bd4f2d] text-[#bd4f2d] line-through'
+                      <span className={`inline-block border border-[#bd4f2d] px-2 py-0.5 font-mono text-xs uppercase text-[#bd4f2d] ${
+                        item.status==='NO_SHOW'?'line-through':''
                       }`}>{labels[item.status]}</span>
                     </td>
                     <td className="px-4 py-3">
