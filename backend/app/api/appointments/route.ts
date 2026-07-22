@@ -5,9 +5,11 @@ import { isAdmin } from '@/lib/auth';
 
 const headers = { 'Access-Control-Allow-Origin': process.env.CORS_ORIGIN ?? 'http://localhost:5173', 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Credentials': 'true' };
 export function OPTIONS() { return new NextResponse(null, { headers }); }
+const phoneRegex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
 export async function POST(request: NextRequest) {
   const { name, phone, service, appointmentAt } = await request.json();
   if (![name, phone, service, appointmentAt].every(value => typeof value === 'string' && value.trim())) return NextResponse.json({ error: 'Preencha todos os campos.' }, { status: 400, headers });
+  if (!phoneRegex.test(phone.trim())) return NextResponse.json({ error: 'Telefone inválido.' }, { status: 400, headers });
   const date = new Date(appointmentAt);
   if (Number.isNaN(date.valueOf()) || date <= new Date()) return NextResponse.json({ error: 'Escolha um horário futuro.' }, { status: 400, headers });
   const result = await db.query('INSERT INTO appointments (customer_name, phone, service, appointment_at) VALUES ($1, $2, $3, $4) RETURNING *', [name.trim(), phone.trim(), service, date]);

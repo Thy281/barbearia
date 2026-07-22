@@ -12,3 +12,13 @@ CREATE TABLE appointments (
 );
 
 CREATE INDEX appointments_appointment_at_idx ON appointments (appointment_at);
+
+CREATE TABLE available_slots (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slot_date DATE NOT NULL,
+  slot_time TIME NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (slot_date, slot_time)
+);
+
+CREATE INDEX available_slots_date_idx ON available_slots (slot_date);
