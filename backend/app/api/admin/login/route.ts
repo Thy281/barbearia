@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
   if (typeof password !== 'string' || !validPassword(password)) return NextResponse.json({ error: 'Senha inválida.' }, { status: 401 });
   await cache.del(attemptsKey);
   const response = NextResponse.json({ ok: true });
-  response.cookies.set('admin_session', sessionToken(), { httpOnly: true, sameSite: 'strict', secure: true, path: '/', maxAge: 60 * 60 * 8 });
+  const isHttps = request.headers.get('x-forwarded-proto') === 'https' || request.nextUrl.protocol === 'https:';
+  response.cookies.set('admin_session', sessionToken(), { httpOnly: true, sameSite: 'strict', secure: isHttps, path: '/', maxAge: 60 * 10 });
   return response;
 }
