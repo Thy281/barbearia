@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
   let result;
   try { result = await db.query('INSERT INTO appointments (customer_name, phone, service, appointment_at, cancel_token_hash) VALUES ($1, $2, $3, $4, $5) RETURNING id, customer_name, phone, service, appointment_at, status, created_at', [name.trim(), phone.trim(), service, date, hashCancellationToken(cancellationToken)]); }
   catch (error: unknown) { if ((error as { code?: string }).code === '23505') return NextResponse.json({ error: 'Este horário acabou de ser reservado.' }, { status: 409, headers }); throw error; }
+  await db.query('INSERT INTO available_slots (slot_date, slot_time) VALUES ($1, $2) ON CONFLICT DO NOTHING', [slotDate, slotTime]);
   await cache.del('appointments');
   return NextResponse.json({ ...result.rows[0], cancellationToken }, { status: 201, headers });
 }

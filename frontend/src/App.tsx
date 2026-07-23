@@ -11,6 +11,7 @@ function openNow() { const p = new Intl.DateTimeFormat('en-US', { timeZone: 'Ame
 function daysInMonth(m: number, y: number) { return new Date(y, m + 1, 0).getDate(); }
 function firstDow(m: number, y: number) { return (new Date(y, m, 1).getDay() + 6) % 7; }
 function toDateStr(d: Date) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function todayPast22(): boolean { const p = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Sao_Paulo', hour: 'numeric', hour12: false }).formatToParts(new Date()); return Number(p.find(x => x.type === 'hour')?.value) >= 22; }
 const today = new Date();
 const todayStr = toDateStr(today);
 
@@ -27,7 +28,7 @@ export default function App() {
   const dim = daysInMonth(cm, cy); const fdow = firstDow(cm, cy);
   const days: {n:number,off:boolean,ok:boolean}[] = [];
   for (let i=0; i<fdow; i++) days.push({n:0,off:true,ok:false});
-  for (let d=1; d<=dim; d++) { const ds = cy+'-'+String(cm+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); days.push({n:d,off:false,ok:ds>=todayStr}); }
+  for (let d=1; d<=dim; d++) { const ds = cy+'-'+String(cm+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); days.push({n:d,off:false,ok:ds>todayStr||(ds===todayStr&&!todayPast22())}); }
   return <main>
     <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-7"><a className="font-display text-3xl font-bold tracking-tight" href="#inicio">LÂMINA<span className="text-[#bd4f2d]">.</span></a><a className="font-mono text-xs uppercase tracking-[.18em]" href="#agendar">Agendar horário</a></header>
     <section id="inicio" className="mx-auto grid max-w-6xl gap-10 px-6 pb-24 pt-12 md:grid-cols-[1.2fr_.8fr]"><div><p className="font-mono text-xs uppercase tracking-[.2em] text-[#bd4f2d]">Barbearia de bairro, precisão de ofício</p><h1 className="mt-5 font-display text-6xl font-bold uppercase leading-[.9] md:text-8xl">Seu corte<br/><em className="font-normal text-[#bd4f2d]">no ponto.</em></h1><p className="mt-8 max-w-md text-lg leading-relaxed text-[#5b574f]">Corte, barba e cuidado sem pressa. Escolha seu serviço e reserve seu horário em poucos minutos.</p></div><aside className="border-l-4 border-[#bd4f2d] bg-[#1d1d1b] p-7 text-[#ede9e1]"><p className="font-mono text-xs uppercase tracking-[.16em]">Agora em Brasília</p><p className="mt-3 font-display text-4xl uppercase">{clock}</p><div className="mt-8 flex items-center gap-3"><span className={`h-3 w-3 rounded-full ${isOpen ? 'bg-[#c5da6d]' : 'bg-[#bd4f2d]'}`}/><span className="font-mono text-sm uppercase">{isOpen ? 'Aberto agora' : 'Fechado agora'}</span></div><p className="mt-6 text-sm text-[#bdb7ab]">Seg–Sex · 09h às 19h<br/>Sábado e domingo · fechado</p></aside></section>
