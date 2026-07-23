@@ -12,7 +12,7 @@ function daysInMonth(m:number,y:number){return new Date(y,m+1,0).getDate()}
 function firstDow(m:number,y:number){return(new Date(y,m,1).getDay()+6)%7}
 
 export default function Admin() {
-  const [password, setPassword] = useState(''); const [logged, setLogged] = useState(false); const [items, setItems] = useState<Appointment[]>([]); const [slots, setSlots] = useState<Slot[]>([]); const [error, setError] = useState(''); const [tab, setTab] = useState<'agenda'|'horarios'>('agenda');
+  const [password, setPassword] = useState(''); const [logged, setLogged] = useState(false); const [checkingSession, setCheckingSession] = useState(true); const [items, setItems] = useState<Appointment[]>([]); const [slots, setSlots] = useState<Slot[]>([]); const [error, setError] = useState(''); const [tab, setTab] = useState<'agenda'|'horarios'>('agenda');
   const [cm, setCm] = useState(today.getMonth()); const [cy, setCy] = useState(today.getFullYear()); const [selDate, setSelDate] = useState(''); const [daySlots, setDaySlots] = useState<Slot[]>([]);
   const dim = daysInMonth(cm,cy); const fdow = firstDow(cm,cy);
   const daysArr:{n:number,off:boolean,ok:boolean}[] = [];
@@ -25,9 +25,11 @@ export default function Admin() {
   async function loadMonthSlots(){const r=await fetch(`${api}/api/admin/slots?month=${cy}-${String(cm+1).padStart(2,'0')}`,{credentials:'include'});if(r.ok)setSlots(await r.json());}
   async function loadDaySlots(d:string){const r=await fetch(`${api}/api/admin/slots?date=${d}`,{credentials:'include'});if(r.ok)setDaySlots(await r.json());}
   async function toggleSlot(d:string,t:string){const existing=daySlots.find(s=>s.slot_date===d&&s.slot_time.slice(0,5)===t);if(existing){await fetch(`${api}/api/admin/slots/${existing.id}`,{method:'DELETE',credentials:'include'});}else{await fetch(`${api}/api/admin/slots`,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({slot_date:d,slot_time:t+':00'})});}await loadDaySlots(d);await loadMonthSlots();}
+  useEffect(()=>{load().then(()=>setLogged(true)).catch(()=>{}).finally(()=>setCheckingSession(false));},[]);
   useEffect(()=>{if(tab==='horarios'&&!selDate)loadMonthSlots()},[tab,cm,cy,selDate]);
   useEffect(()=>{if(selDate)loadDaySlots(selDate);},[selDate]);
 
+  if(checkingSession) return <main className="min-h-screen" style={{background:'#ede9e1'}}/>;
   if(!logged) return (
     <main className="grid min-h-screen place-items-center px-6" style={{background:'#ede9e1'}}>
       <form onSubmit={login} className="w-full max-w-sm border-t-4 border-[#bd4f2d] bg-white p-8 shadow-lg">
