@@ -12,8 +12,14 @@ export function validPassword(password: string) {
   const candidate = createHmac('sha256', secret()).update(password).digest('hex');
   return candidate.length === expected.length && timingSafeEqual(Buffer.from(candidate), Buffer.from(expected));
 }
-export function sessionToken() { return createHmac('sha256', secret()).update('barbearia-admin').digest('hex'); }
+export function sessionToken() {
+  const window = Math.floor(Date.now() / 600000);
+  return createHmac('sha256', secret()).update(`barbearia-admin:${window}`).digest('hex');
+}
 export function isAdmin(request: NextRequest) {
   const token = request.cookies.get('admin_session')?.value;
-  return Boolean(token && token === sessionToken());
+  if (!token) return false;
+  const window = Math.floor(Date.now() / 600000);
+  return token === createHmac('sha256', secret()).update(`barbearia-admin:${window}`).digest('hex')
+      || token === createHmac('sha256', secret()).update(`barbearia-admin:${window - 1}`).digest('hex');
 }
